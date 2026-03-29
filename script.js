@@ -223,8 +223,12 @@ function initRSVP() {
     }
 
     const data = {
-      ...raw,
+      parentName: raw.yourName || '',
+      attending: raw.attending || '',
+      adultsCount: raw.adultsCount || '',
+      kidsCount: raw.kidsCount || '0',
       kidNames: kidNames.length > 0 ? kidNames.join(', ') : 'None',
+      message: raw.message || '',
       timestamp: new Date().toISOString(),
     };
 
@@ -388,6 +392,199 @@ function initParallax() {
   });
 }
 
+/* ===== CLICK WEB ANIMATION ===== */
+function initClickWebs() {
+  // Don't fire on buttons, links, form elements, or lightbox
+  const IGNORE = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'LABEL'];
+
+  document.addEventListener('click', (e) => {
+    if (IGNORE.includes(e.target.tagName)) return;
+    if (e.target.closest('.rsvp-form, .lightbox, .photo-frame, a, button')) return;
+    spawnWeb(e.clientX, e.clientY);
+  });
+
+  function spawnWeb(x, y) {
+    const canvas = document.createElement('canvas');
+    const size = 200;
+    canvas.width = size;
+    canvas.height = size;
+    canvas.style.cssText = `
+      position: fixed;
+      left: ${x - size / 2}px;
+      top: ${y - size / 2}px;
+      pointer-events: none;
+      z-index: 9998;
+    `;
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    const cx = size / 2;
+    const cy = size / 2;
+    const maxR = size / 2 - 10;
+    const numSpokes = 8 + Math.floor(Math.random() * 5); // 8-12 spokes
+    const numRings = 4 + Math.floor(Math.random() * 3);  // 4-6 rings
+    const spokeAngles = [];
+
+    for (let i = 0; i < numSpokes; i++) {
+      spokeAngles.push((i / numSpokes) * Math.PI * 2 + (Math.random() - 0.5) * 0.3);
+    }
+
+    // Pick a random color scheme per web
+    const schemes = [
+      { stroke: 'rgba(255, 255, 255, 0.7)', glow: 'rgba(226, 54, 54, 0.3)' },
+      { stroke: 'rgba(255, 213, 79, 0.7)', glow: 'rgba(255, 213, 79, 0.2)' },
+      { stroke: 'rgba(226, 54, 54, 0.6)', glow: 'rgba(226, 54, 54, 0.3)' },
+      { stroke: 'rgba(21, 101, 192, 0.6)', glow: 'rgba(21, 101, 192, 0.3)' },
+    ];
+    const scheme = schemes[Math.floor(Math.random() * schemes.length)];
+
+    let progress = 0;
+    const duration = 400; // ms for web to fully draw
+    const fadeStart = 1200; // ms before fade begins
+    const fadeDuration = 600;
+    const startTime = performance.now();
+
+    function drawFrame(now) {
+      const elapsed = now - startTime;
+      progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+
+      ctx.clearRect(0, 0, size, size);
+
+      // Global fade
+      let alpha = 1;
+      if (elapsed > fadeStart) {
+        alpha = 1 - Math.min((elapsed - fadeStart) / fadeDuration, 1);
+      }
+      ctx.globalAlpha = alpha;
+
+      // Glow at center
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * eased * 0.5);
+      glow.addColorStop(0, scheme.glow);
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.strokeStyle = scheme.stroke;
+      ctx.lineWidth = 1.2;
+      ctx.lineCap = 'round';
+
+      const currentR = maxR * eased;
+
+      // Draw spokes
+      spokeAngles.forEach((angle) => {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(
+          cx + Math.cos(angle) * currentR,
+          cy + Math.sin(angle) * currentR
+        );
+        ctx.stroke();
+      });
+
+      // Draw spiral rings
+      const ringsDrawn = Math.floor(numRings * eased);
+      for (let r = 1; r <= ringsDrawn; r++) {
+        const ringR = (r / numRings) * currentR;
+        ctx.beginPath();
+        for (let i = 0; i <= spokeAngles.length; i++) {
+          const angle = spokeAngles[i % spokeAngles.length];
+          const nextAngle = spokeAngles[(i + 1) % spokeAngles.length];
+          // Slight wobble for organic look
+          const wobble = ringR + (Math.sin(i * 3 + r * 2) * 3);
+          const px = cx + Math.cos(angle) * wobble;
+          const py = cy + Math.sin(angle) * wobble;
+          if (i === 0) {
+            ctx.moveTo(px, py);
+          } else {
+            // Curved segments between spokes
+            const cpAngle = (angle + (spokeAngles[(i - 1) % spokeAngles.length] || angle)) / 2;
+            ctx.lineTo(px, py);
+          }
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Small spider dot at center
+      if (eased > 0.2) {
+        ctx.globalAlpha = alpha * Math.min((eased - 0.2) / 0.3, 1);
+        ctx.fillStyle = scheme.stroke;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tiny legs
+        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = scheme.stroke;
+        for (let i = 0; i < 8; i++) {
+          const legAngle = (i / 8) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(legAngle) * 3, cy + Math.sin(legAngle) * 3);
+          const mid = 7;
+          const end = 10;
+          const bendAngle = legAngle + (i < 4 ? 0.3 : -0.3);
+          ctx.quadraticCurveTo(
+            cx + Math.cos(bendAngle) * mid,
+            cy + Math.sin(bendAngle) * mid,
+            cx + Math.cos(legAngle) * end,
+            cy + Math.sin(legAngle) * end
+          );
+          ctx.stroke();
+        }
+      }
+
+      if (elapsed < fadeStart + fadeDuration) {
+        requestAnimationFrame(drawFrame);
+      } else {
+        canvas.remove();
+      }
+    }
+
+    requestAnimationFrame(drawFrame);
+
+    // Spawn a "thwip" text occasionally
+    if (Math.random() < 0.3) {
+      spawnThwip(x, y);
+    }
+  }
+
+  function spawnThwip(x, y) {
+    const words = ['Thwip!', 'Pow!', 'Zap!', 'Web!'];
+    const el = document.createElement('div');
+    el.textContent = words[Math.floor(Math.random() * words.length)];
+    el.style.cssText = `
+      position: fixed;
+      left: ${x + 20}px;
+      top: ${y - 30}px;
+      font-family: 'Bangers', cursive;
+      font-size: 1.4rem;
+      color: #ffd54f;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      pointer-events: none;
+      z-index: 9999;
+      animation: thwip-float 1s ease-out forwards;
+      transform: rotate(${Math.random() * 20 - 10}deg);
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+
+  // Inject thwip animation
+  if (!document.getElementById('thwip-style')) {
+    const style = document.createElement('style');
+    style.id = 'thwip-style';
+    style.textContent = `
+      @keyframes thwip-float {
+        0% { opacity: 1; transform: translateY(0) scale(0.5); }
+        30% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+        100% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
 /* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
@@ -400,4 +597,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initParallax();
   initSpideyButton();
+  initClickWebs();
 });

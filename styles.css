@@ -171,7 +171,7 @@ body {
   font-size: clamp(2.8rem, 8vw, 5.5rem);
   color: var(--white);
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
   letter-spacing: 2px;
 }
@@ -250,11 +250,61 @@ body {
   gap: 0.3rem;
 }
 
+/* ===== HERO PORTRAIT ===== */
+.hero-portrait {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 1.5rem;
+}
+
+.hero-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 50%;
+  border: 4px solid var(--spidey-gold);
+  box-shadow:
+    0 0 30px rgba(226, 54, 54, 0.4),
+    0 0 60px rgba(21, 101, 192, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-portrait-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(226, 54, 54, 0.3);
+  animation: portrait-pulse 3s ease-in-out infinite;
+}
+
+@keyframes portrait-pulse {
+  0%, 100% {
+    transform: scale(1);
+    border-color: rgba(226, 54, 54, 0.3);
+    box-shadow: 0 0 20px rgba(226, 54, 54, 0.1);
+  }
+  50% {
+    transform: scale(1.05);
+    border-color: rgba(21, 101, 192, 0.4);
+    box-shadow: 0 0 30px rgba(21, 101, 192, 0.2);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-portrait {
+    width: 260px;
+    height: 260px;
+  }
+}
+
 .hero-tagline {
   font-family: var(--font-marker);
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-style: italic;
 }
 
@@ -435,7 +485,7 @@ body {
 
 .details-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -534,6 +584,53 @@ body {
 
 .detail-link:hover {
   color: var(--spidey-red);
+}
+
+/* Dress code card */
+.detail-card-dress::before {
+  background: linear-gradient(90deg, var(--spidey-red), var(--spidey-blue), var(--spidey-red));
+}
+
+.detail-card-dress:hover {
+  border-color: var(--spidey-red);
+  box-shadow: 0 12px 40px rgba(226, 54, 54, 0.15);
+}
+
+.detail-icon-dress {
+  background: linear-gradient(135deg, rgba(226, 54, 54, 0.1), rgba(21, 101, 192, 0.1));
+}
+
+.dress-code-colors {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.color-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.color-dot:hover {
+  transform: scale(1.2);
+}
+
+.color-red {
+  background: var(--spidey-red);
+}
+
+.color-blue {
+  background: var(--spidey-blue);
+}
+
+.color-both {
+  background: linear-gradient(135deg, var(--spidey-red) 50%, var(--spidey-blue) 50%);
 }
 
 /* ===== COUNTDOWN ===== */
@@ -999,7 +1096,7 @@ body {
   }
 
   .details-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
