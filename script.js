@@ -121,6 +121,58 @@ function initLightbox() {
 // 5. Copy the deployment URL and paste it below
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw2CBYyzMlsaFAhPrQQdai75i8SbhO9U3cPu-BjsozyB_8mOj4-pAsy2ygIeAgFg_hv/exec';
 
+/* ===== SPIDEY BUTTON ===== */
+function initSpideyButton() {
+  const button = document.getElementById('spidey-button');
+  if (!button) return;
+
+  button.addEventListener('click', () => {
+    // Launch confetti
+    launchConfetti();
+
+    // Add web-shoot effect
+    button.classList.add('web-shoot');
+    button.querySelector('.spidey-button-text').textContent = '🎉 Spidey Power Activated!';
+
+    // Create floating emojis
+    const emojis = ['🕸️', '🕷️', '⚡', '💥', '✨', '🎉'];
+    for (let i = 0; i < 12; i++) {
+      const emoji = document.createElement('div');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.cssText = `
+        position: fixed;
+        left: ${button.getBoundingClientRect().left + button.offsetWidth / 2}px;
+        top: ${button.getBoundingClientRect().top}px;
+        font-size: ${Math.random() * 20 + 20}px;
+        pointer-events: none;
+        z-index: 9999;
+        animation: float-emoji 1.5s ease-out forwards;
+      `;
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 1500);
+    }
+
+    // Reset after animation
+    setTimeout(() => {
+      button.classList.remove('web-shoot');
+      button.querySelector('.spidey-button-text').textContent = '🕸️ Thwip! Click for Spidey Magic!';
+    }, 2000);
+  });
+
+  // Add emoji animation style
+  if (!document.getElementById('emoji-style')) {
+    const style = document.createElement('style');
+    style.id = 'emoji-style';
+    style.textContent = `
+      @keyframes float-emoji {
+        0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+        100% { transform: translateY(-150px) rotate(${Math.random() * 360}deg) scale(0.5); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
 /* ===== DYNAMIC KID NAME FIELDS ===== */
 function initKidNames() {
   const kidsSelect = document.getElementById('kids-count');
@@ -131,13 +183,20 @@ function initKidNames() {
     // 4+ means 4 fields (they can add more names in the message)
     const numFields = Math.min(count || 0, 4);
 
+    if (numFields === 0) {
+      container.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+
+    container.style.display = 'block';
     container.innerHTML = '';
     for (let i = 1; i <= numFields; i++) {
       const div = document.createElement('div');
       div.classList.add('form-group');
       div.innerHTML = `
-        <label for="kid-name-${i}">Child ${numFields > 1 ? i : ''} Name</label>
-        <input type="text" id="kid-name-${i}" name="kidName${i}" placeholder="Child's name" required>
+        <label for="kid-name-${i}">Kid ${numFields > 1 ? i : ''} Name</label>
+        <input type="text" id="kid-name-${i}" name="kidName${i}" placeholder="Child's name">
       `;
       container.appendChild(div);
     }
@@ -165,7 +224,7 @@ function initRSVP() {
 
     const data = {
       ...raw,
-      kidNames: kidNames.join(', '),
+      kidNames: kidNames.length > 0 ? kidNames.join(', ') : 'None',
       timestamp: new Date().toISOString(),
     };
 
@@ -340,4 +399,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initWebCanvas();
   initSmoothScroll();
   initParallax();
+  initSpideyButton();
 });

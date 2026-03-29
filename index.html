@@ -57,10 +57,9 @@
         <br>
         4th Birthday!
       </h1>
-      <div class="turning-badge animate-in">
-        <span class="turning-text">turning</span>
-        <span class="age-number">4</span>
-      </div>
+      <button class="spidey-button animate-in" id="spidey-button" type="button">
+        <span class="spidey-button-text">🕸️ Thwip! Click for Spidey Magic!</span>
+      </button>
       <p class="hero-tagline animate-in">With great power comes a great party!</p>
 
       <!-- Inline countdown -->
@@ -261,45 +260,41 @@
       </div>
       <form class="rsvp-form" id="rsvp-form">
         <div class="form-group">
-          <label for="parent-name">Your Name</label>
-          <input type="text" id="parent-name" name="parentName" placeholder="Parent/guardian name" required>
+          <label for="your-name">Your Name</label>
+          <input type="text" id="your-name" name="yourName" placeholder="Enter your name" required>
         </div>
-        <div class="form-row form-row-3">
+        <div class="form-group">
+          <label for="attending">Will you attend?</label>
+          <select id="attending" name="attending" required>
+            <option value="">Select</option>
+            <option value="yes"> Yes, I'll be there!</option>
+            <option value="maybe"> Maybe, I'll confirm later</option>
+            <option value="no"> Can't make it</option>
+          </select>
+        </div>
+        <div class="form-row form-row-2">
           <div class="form-group">
-            <label for="kids-count">Kids</label>
-            <select id="kids-count" name="kidsCount" required>
-              <option value="">Select</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4+">4+</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="adults-count">Adults</label>
+            <label for="adults-count">Adults (including you)</label>
             <select id="adults-count" name="adultsCount" required>
-              <option value="">Select</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4+">4+</option>
+              <option value="1">1 adult</option>
+              <option value="2">2 adults</option>
+              <option value="3">3 adults</option>
+              <option value="4">4 adults</option>
+              <option value="5+">5+ adults</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="attending">Attending?</label>
-            <select id="attending" name="attending" required>
-              <option value="">Select</option>
-              <option value="yes">Yes!</option>
-              <option value="maybe">Maybe</option>
-              <option value="no">Can't make it</option>
+            <label for="kids-count">Kids (optional)</label>
+            <select id="kids-count" name="kidsCount">
+              <option value="0">No kids</option>
+              <option value="1">1 kid</option>
+              <option value="2">2 kids</option>
+              <option value="3">3 kids</option>
+              <option value="4+">4+ kids</option>
             </select>
           </div>
         </div>
-        <div id="kid-names-container">
-          <div class="form-group">
-            <label for="kid-name-1">Child's Name</label>
-            <input type="text" id="kid-name-1" name="kidName1" placeholder="Child's name" required>
-          </div>
+        <div id="kid-names-container" style="display: none;">
         </div>
         <div class="form-group">
           <label for="message">Message for Akshar</label>

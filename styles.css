@@ -207,36 +207,47 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
-.turning-badge {
+/* ===== SPIDEY BUTTON ===== */
+.spidey-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  background: var(--spidey-red);
-  padding: 0.6rem 2rem;
+  gap: 0.5rem;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, var(--spidey-red) 0%, #ff4444 100%);
+  color: var(--white);
+  border: 3px solid var(--spidey-gold);
   border-radius: 60px;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 20px rgba(226, 54, 54, 0.5);
-}
-
-.turning-text {
+  box-shadow: 0 4px 20px rgba(226, 54, 54, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  cursor: pointer;
   font-family: var(--font-comic);
-  font-size: 1.4rem;
-  color: var(--white);
-  letter-spacing: 3px;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  animation: spidey-pulse 2s ease-in-out infinite;
 }
 
-.age-number {
-  font-family: var(--font-comic);
-  font-size: 3rem;
-  color: var(--spidey-gold);
-  line-height: 1;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
-  animation: bounce-number 1s ease-in-out infinite;
+@keyframes spidey-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(226, 54, 54, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 6px 30px rgba(226, 54, 54, 0.7); }
 }
 
-@keyframes bounce-number {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+.spidey-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 40px rgba(226, 54, 54, 0.8), 0 0 20px var(--spidey-gold);
+  background: linear-gradient(135deg, #ff5555 0%, var(--spidey-red) 100%);
+}
+
+.spidey-button:active,
+.spidey-button.web-shoot {
+  transform: scale(0.95);
+  animation: none;
+}
+
+.spidey-button-text {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .hero-tagline {
@@ -603,14 +614,7 @@ body {
 }
 
 .gallery-item {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
   transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.gallery-item.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
 .photo-frame {
@@ -767,6 +771,10 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+.form-row-2 {
+  grid-template-columns: 1fr 1fr;
 }
 
 .form-row-3 {
