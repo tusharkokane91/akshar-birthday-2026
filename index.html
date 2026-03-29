@@ -278,49 +278,44 @@
         </svg>
       </div>
       <form class="rsvp-form" id="rsvp-form">
-        <div class="form-group">
-          <label for="your-name">Your Name</label>
-          <input type="text" id="your-name" name="yourName" placeholder="Enter your name" required>
-        </div>
-        <div class="form-group">
-          <label for="attending">Will you attend?</label>
-          <select id="attending" name="attending" required>
-            <option value="">Select</option>
-            <option value="yes"> Yes, I'll be there!</option>
-            <option value="maybe"> Maybe, I'll confirm later</option>
-            <option value="no"> Can't make it</option>
-          </select>
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label for="your-name">Your Name</label>
+            <input type="text" id="your-name" name="yourName" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your number" required>
+          </div>
         </div>
         <div class="form-row form-row-2">
           <div class="form-group">
-            <label for="adults-count">Adults (including you)</label>
-            <select id="adults-count" name="adultsCount" required>
-              <option value="1">1 adult</option>
-              <option value="2">2 adults</option>
-              <option value="3">3 adults</option>
-              <option value="4">4 adults</option>
-              <option value="5+">5+ adults</option>
+            <label for="attending">Attending?</label>
+            <select id="attending" name="attending" required>
+              <option value="">Select</option>
+              <option value="yes">Yes!</option>
+              <option value="maybe">Maybe</option>
+              <option value="no">Can't make it</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="kids-count">Kids (optional)</label>
-            <select id="kids-count" name="kidsCount">
-              <option value="0">No kids</option>
-              <option value="1">1 kid</option>
-              <option value="2">2 kids</option>
-              <option value="3">3 kids</option>
-              <option value="4+">4+ kids</option>
+          <div class="form-group" id="guest-count-group">
+            <label for="guest-count">How many guests?</label>
+            <select id="guest-count" name="guestCount">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6+">6+</option>
             </select>
           </div>
-        </div>
-        <div id="kid-names-container" style="display: none;">
         </div>
         <div class="form-group">
           <label for="message">Message for Akshar</label>
-          <textarea id="message" name="message" placeholder="Write a birthday message..." rows="3"></textarea>
+          <textarea id="message" name="message" placeholder="Birthday wish or anything we should know..." rows="2"></textarea>
         </div>
         <button type="submit" class="rsvp-button">
-          <span class="button-text">SEND YOUR RSVP</span>
+          <span class="button-text">SEND RSVP</span>
           <span class="button-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
@@ -336,8 +331,8 @@
             <path d="M30 50 L45 65 L70 35" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>Got it!</h3>
-        <p>Thanks for letting us know! See you at the party!</p>
+        <h3 id="success-title">Got it!</h3>
+        <p id="success-message">Thanks for letting us know! See you at the party!</p>
       </div>
     </div>
   </section>

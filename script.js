@@ -173,41 +173,27 @@ function initSpideyButton() {
   }
 }
 
-/* ===== DYNAMIC KID NAME FIELDS ===== */
-function initKidNames() {
-  const kidsSelect = document.getElementById('kids-count');
-  const container = document.getElementById('kid-names-container');
-
-  kidsSelect.addEventListener('change', () => {
-    const count = parseInt(kidsSelect.value) || 0;
-    // 4+ means 4 fields (they can add more names in the message)
-    const numFields = Math.min(count || 0, 4);
-
-    if (numFields === 0) {
-      container.style.display = 'none';
-      container.innerHTML = '';
-      return;
-    }
-
-    container.style.display = 'block';
-    container.innerHTML = '';
-    for (let i = 1; i <= numFields; i++) {
-      const div = document.createElement('div');
-      div.classList.add('form-group');
-      div.innerHTML = `
-        <label for="kid-name-${i}">Kid ${numFields > 1 ? i : ''} Name</label>
-        <input type="text" id="kid-name-${i}" name="kidName${i}" placeholder="Child's name">
-      `;
-      container.appendChild(div);
-    }
-  });
-}
-
 /* ===== RSVP FORM ===== */
 function initRSVP() {
   const form = document.getElementById('rsvp-form');
   const success = document.getElementById('rsvp-success');
   const submitBtn = form.querySelector('.rsvp-button');
+  const attending = document.getElementById('attending');
+  const guestGroup = document.getElementById('guest-count-group');
+
+  // Hide guest count when "Can't make it"
+  attending.addEventListener('change', () => {
+    guestGroup.style.display = attending.value === 'no' ? 'none' : '';
+  });
+
+  // Check if already submitted
+  if (localStorage.getItem('akshar-birthday-rsvp-sent')) {
+    form.style.display = 'none';
+    success.style.display = 'block';
+    document.getElementById('success-title').textContent = 'Already RSVP\'d!';
+    document.getElementById('success-message').textContent = 'We already have your RSVP. See you at the party!';
+    return;
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -215,33 +201,25 @@ function initRSVP() {
     const formData = new FormData(form);
     const raw = Object.fromEntries(formData);
 
-    // Collect all kid names into a single comma-separated string
-    const kidNames = [];
-    for (let i = 1; i <= 4; i++) {
-      if (raw[`kidName${i}`]) kidNames.push(raw[`kidName${i}`]);
-      delete raw[`kidName${i}`];
-    }
-
     const data = {
-      parentName: raw.yourName || '',
+      name: raw.yourName || '',
+      phone: raw.phone || '',
       attending: raw.attending || '',
-      adultsCount: raw.adultsCount || '',
-      kidsCount: raw.kidsCount || '0',
-      kidNames: kidNames.length > 0 ? kidNames.join(', ') : 'None',
+      guests: raw.attending === 'no' ? '0' : (raw.guestCount || '1'),
       message: raw.message || '',
       timestamp: new Date().toISOString(),
     };
 
-    // Disable button while submitting
     submitBtn.disabled = true;
     submitBtn.querySelector('.button-text').textContent = 'Sending...';
 
-    // Always save locally as backup
+    // Save locally as backup
     const rsvps = JSON.parse(localStorage.getItem('akshar-birthday-rsvps') || '[]');
     rsvps.push(data);
     localStorage.setItem('akshar-birthday-rsvps', JSON.stringify(rsvps));
+    localStorage.setItem('akshar-birthday-rsvp-sent', 'true');
 
-    // Send to Google Sheets if configured
+    // Send to Google Sheets
     if (GOOGLE_SHEET_URL) {
       try {
         await fetch(GOOGLE_SHEET_URL, {
@@ -251,12 +229,25 @@ function initRSVP() {
           body: JSON.stringify(data),
         });
       } catch (err) {
-        // Silently fail — data is saved locally as backup
         console.warn('Could not reach Google Sheets, saved locally:', err);
       }
     }
 
-    // Show success
+    // Dynamic success message
+    const successTitle = document.getElementById('success-title');
+    const successMsg = document.getElementById('success-message');
+
+    if (raw.attending === 'yes') {
+      successTitle.textContent = 'Awesome!';
+      successMsg.textContent = 'Can\'t wait to see you! Akshar will be thrilled!';
+    } else if (raw.attending === 'maybe') {
+      successTitle.textContent = 'Noted!';
+      successMsg.textContent = 'Hope you can make it! We\'ll keep a spot for you.';
+    } else {
+      successTitle.textContent = 'We\'ll miss you!';
+      successMsg.textContent = 'Thanks for letting us know. Maybe next time!';
+    }
+
     form.style.display = 'none';
     success.style.display = 'block';
     launchConfetti();
@@ -585,12 +576,48 @@ function initClickWebs() {
   }
 }
 
+/* ===== SPIDER-MAN THEME MUSIC ===== */
+function initThemeMusic() {
+  const audio = new Audio('audio/theme.mp3');
+  audio.loop = true;
+  let isPlaying = false;
+
+  // Create floating music button
+  const btn = document.createElement('button');
+  btn.className = 'music-toggle';
+  btn.innerHTML = '<span class="music-icon">🎵</span>';
+  btn.title = 'Play Spider-Man Theme';
+  document.body.appendChild(btn);
+
+  function play() {
+    audio.play();
+    isPlaying = true;
+    btn.classList.add('playing');
+    btn.innerHTML = '<span class="music-icon">🔊</span>';
+  }
+
+  function stop() {
+    audio.pause();
+    audio.currentTime = 0;
+    isPlaying = false;
+    btn.classList.remove('playing');
+    btn.innerHTML = '<span class="music-icon">🎵</span>';
+  }
+
+  btn.addEventListener('click', () => {
+    if (isPlaying) {
+      stop();
+    } else {
+      play();
+    }
+  });
+}
+
 /* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initScrollAnimations();
   initLightbox();
-  initKidNames();
   initRSVP();
   initParticles();
   initWebCanvas();
@@ -598,4 +625,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   initSpideyButton();
   initClickWebs();
+  initThemeMusic();
 });

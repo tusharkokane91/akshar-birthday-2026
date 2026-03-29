@@ -5,7 +5,7 @@
  * 1. Go to https://sheets.google.com and create a new spreadsheet
  * 2. Name it "Akshar Birthday RSVPs" (or whatever you like)
  * 3. Add these headers in Row 1:
- *    A1: Timestamp | B1: Parent Name | C1: Kid Names | D1: Kids | E1: Adults | F1: Attending | G1: Message
+ *    A1: Timestamp | B1: Name | C1: Phone | D1: Attending | E1: Guests | F1: Message
  * 4. Go to Extensions > Apps Script
  * 5. Delete any existing code and paste EVERYTHING below this comment block
  * 6. Click Deploy > New Deployment
@@ -26,11 +26,10 @@ function doPost(e) {
 
     sheet.appendRow([
       data.timestamp || new Date().toISOString(),
-      data.parentName || '',
-      data.kidNames || '',
-      data.kidsCount || '',
-      data.adultsCount || '',
+      data.name || '',
+      data.phone || '',
       data.attending || '',
+      data.guests || '',
       data.message || ''
     ]);
 

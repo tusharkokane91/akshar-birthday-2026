@@ -1077,6 +1077,46 @@ body {
   transform: translateY(-50%) scale(1.1);
 }
 
+/* ===== MUSIC TOGGLE ===== */
+.music-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--spidey-red), var(--spidey-dark-red));
+  border: 3px solid var(--spidey-gold);
+  color: white;
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(226, 54, 54, 0.4);
+  transition: all 0.3s ease;
+}
+
+.music-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(226, 54, 54, 0.6);
+}
+
+.music-toggle.playing {
+  animation: music-bounce 0.6s ease-in-out infinite alternate;
+  background: linear-gradient(135deg, var(--spidey-blue), var(--spidey-dark-blue));
+}
+
+.music-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+@keyframes music-bounce {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
+
 /* ===== SCROLL ANIMATIONS ===== */
 [data-animate] {
   opacity: 0;
