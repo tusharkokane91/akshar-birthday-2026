@@ -119,7 +119,7 @@ function initLightbox() {
 // 3. Paste the code from google-apps-script.js in this project
 // 4. Deploy as Web App (Execute as: Me, Access: Anyone)
 // 5. Copy the deployment URL and paste it below
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw2CBYyzMlsaFAhPrQQdai75i8SbhO9U3cPu-BjsozyB_8mOj4-pAsy2ygIeAgFg_hv/exec';
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzjSO5b4XGLfFubgXyhCfPDdF_gYey8sl4wJqicgkkqv_sl5matFeLrG__Ic2hsZMPlqA/exec';
 
 /* ===== SPIDEY BUTTON ===== */
 function initSpideyButton() {
