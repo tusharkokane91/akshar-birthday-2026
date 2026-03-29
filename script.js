@@ -10,7 +10,6 @@ function initCountdown() {
       document.getElementById('days').textContent = '00';
       document.getElementById('hours').textContent = '00';
       document.getElementById('minutes').textContent = '00';
-      document.getElementById('seconds').textContent = '00';
       return;
     }
 
@@ -22,7 +21,6 @@ function initCountdown() {
     document.getElementById('days').textContent = String(days).padStart(2, '0');
     document.getElementById('hours').textContent = String(hours).padStart(2, '0');
     document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
   }
 
   update();
@@ -31,21 +29,33 @@ function initCountdown() {
 
 /* ===== SCROLL ANIMATIONS ===== */
 function initScrollAnimations() {
+  const elements = document.querySelectorAll('[data-animate]');
+
+  // Fallback: if IntersectionObserver isn't supported or fails, show everything
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach((el) => el.classList.add('visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          // Stagger children animations
           const delay = Array.from(entry.target.parentElement.children).indexOf(entry.target) * 100;
           entry.target.style.transitionDelay = `${delay}ms`;
+          entry.target.classList.add('visible');
         }
       });
     },
-    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    { threshold: 0.05, rootMargin: '0px 0px 50px 0px' }
   );
 
-  document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
+  elements.forEach((el) => observer.observe(el));
+
+  // Safety net: make everything visible after 3 seconds regardless
+  setTimeout(() => {
+    elements.forEach((el) => el.classList.add('visible'));
+  }, 3000);
 }
 
 /* ===== GALLERY LIGHTBOX ===== */
