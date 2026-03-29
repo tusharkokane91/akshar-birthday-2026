@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Comic Neue', cursive;
+      overflow: hidden;
+    }
+    .hero {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 15% 80%, rgba(21, 101, 192, 0.4) 0%, transparent 40%),
+        radial-gradient(ellipse at 85% 20%, rgba(21, 101, 192, 0.3) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 50%, rgba(226, 54, 54, 0.2) 0%, transparent 60%),
+        linear-gradient(135deg, #0a1628 0%, #121233 40%, #0d1b3e 70%, #0a1628 100%);
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-conic-gradient(
+        rgba(255, 255, 255, 0.02) 0deg 10deg,
+        transparent 10deg 20deg
+      );
+    }
+    .content {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .spider-badge {
+      margin: 0 auto 1.5rem;
+      width: 90px;
+      height: 90px;
+      background: rgba(226, 54, 54, 0.15);
+      border: 2px solid rgba(226, 54, 54, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pre-title {
+      font-size: 1.1rem;
+      letter-spacing: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+      letter-spacing: 2px;
+    }
+    .name {
+      color: #ffd54f;
+      position: relative;
+      display: inline-block;
+    }
+    .name::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #ffd54f;
+      border-radius: 2px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #e23636;
+      padding: 0.6rem 2rem;
+      border-radius: 60px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(226, 54, 54, 0.5);
+    }
+    .badge-text {
+      font-family: 'Bangers', cursive;
+      font-size: 1.4rem;
+      color: white;
+      letter-spacing: 3px;
+    }
+    .badge-num {
+      font-family: 'Bangers', cursive;
+      font-size: 3rem;
+      color: #ffd54f;
+      line-height: 1;
+    }
+    .tagline {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1.5rem;
+    }
+    .date {
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="content">
+      <div class="spider-badge">
+        <svg viewBox="0 0 100 100" width="60" height="60">
+          <ellipse cx="50" cy="40" rx="15" ry="12" fill="#e23636"/>
+          <ellipse cx="50" cy="58" rx="20" ry="18" fill="#e23636"/>
+          <path d="M30,40 Q15,25 5,15" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M70,40 Q85,25 95,15" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M30,50 Q10,50 0,45" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M70,50 Q90,50 100,45" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M30,58 Q10,65 0,75" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M70,58 Q90,65 100,75" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M35,70 Q20,80 10,92" stroke="#e23636" stroke-width="3" fill="none"/>
+          <path d="M65,70 Q80,80 90,92" stroke="#e23636" stroke-width="3" fill="none"/>
+          <ellipse cx="43" cy="38" rx="6" ry="7" fill="white" transform="rotate(-10,43,38)"/>
+          <ellipse cx="57" cy="38" rx="6" ry="7" fill="white" transform="rotate(10,57,38)"/>
+        </svg>
+      </div>
+      <p class="pre-title">You're invited to</p>
+      <h1 class="title">
+        <span class="name">Akshar's</span><br>
+        4th Birthday!
+      </h1>
+      <div class="badge">
+        <span class="badge-text">turning</span>
+        <span class="badge-num">4</span>
+      </div>
+      <p class="tagline">With great power comes a great party!</p>
+      <p class="date">Monday, March 30, 2026 &bull; 6:30 PM onwards</p>
+    </div>
+  </div>
+</body>
+</html>
